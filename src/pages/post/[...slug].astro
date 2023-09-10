@@ -10,7 +10,6 @@ const posts = await getCollection('blog');
 
 export async function getStaticPaths() {
     const posts = await getPosts();
-    console.log(posts);
     return posts.map((post) => ({
         params: { slug: post.data.title },
         props: post,
@@ -24,6 +23,7 @@ const getRelatedPosts = (post: Props) => {
     const relatedPosts = posts.filter(
         (p) =>
             p.slug !== post.slug &&
+            !p.data.draft &&
             p.data.tags.some((t) => post.data.tags.includes(t)),
     );
     return relatedPosts.slice(0, 3);
