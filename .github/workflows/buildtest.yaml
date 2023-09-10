@@ -1,8 +1,7 @@
-name: github pages
+name: buildtest
+
 on:
-    push:
-        branches:
-            - main
+    pull_request:
         paths:
             - 'src/**'
             - 'public/**'
@@ -11,8 +10,9 @@ on:
             - 'tsconfig.json'
             - 'tailwind.config.js'
             - '.github/workflows/deploy.yml'
+
 jobs:
-    deploy:
+    build:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
@@ -24,10 +24,3 @@ jobs:
               run: npm ci
             - name: build
               run: npm run build
-            - name: add nojekyll
-              run: touch ./dist/nojekyll
-            - name: deploy
-              uses: peaceiris/actions-gh-pages@v3
-              with:
-                  github_token: ${{ secrets.GITHUB_TOKEN }}
-                  publish_dir: ./dist
